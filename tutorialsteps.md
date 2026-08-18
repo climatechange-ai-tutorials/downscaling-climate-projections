@@ -69,11 +69,11 @@ coastlines, and rain-shadow effects that strongly influence local precipitation.
 
 ## Step 4: Load and inspect the training data
 
-- [ ] Load the ACCESS-CM2 training predictors and precipitation target.
-- [ ] Inspect their dimensions, coordinates, variables, and units.
-- [ ] Plot one day of all 15 predictor fields and its matching precipitation field.
-- [ ] Confirm that predictors have shape `(time, 15, 16, 16)` after conversion.
-- [ ] Confirm that each precipitation map is flattened to 16,384 output values.
+- [X] Load the ACCESS-CM2 training predictors and precipitation target.
+- [X] Inspect their dimensions, coordinates, variables, and units.
+- [X] Plot one day of all 15 predictor fields and its matching precipitation field.
+- [X] Confirm that predictors have shape `(time, 15, 16, 16)` after conversion.
+- [X] Confirm that each precipitation map is flattened to 16,384 output values.
 
 Understand the terminology:
 
@@ -85,36 +85,36 @@ Understand the terminology:
 
 ## Step 5: Prepare the data correctly
 
-- [ ] Split 1961-1980 into training years 1961-1976 and validation years 1977-1980.
-- [ ] Keep 1981-2000 independent for later testing.
-- [ ] Calculate predictor means and standard deviations using training years only.
-- [ ] Standardize the training and validation predictors.
-- [ ] Convert predictors and precipitation to `float32` arrays and PyTorch tensors.
-- [ ] Build the training and validation `DataLoader` objects.
-- [ ] Check the printed sample counts and tensor shapes.
+- [X] Split 1961-1980 into training years 1961-1976 and validation years 1977-1980.
+- [X] Keep 1981-2000 independent for later testing.
+- [X] Calculate predictor means and standard deviations using training years only.
+- [X] Standardize the training and validation predictors.
+- [X] Convert predictors and precipitation to `float32` arrays and PyTorch tensors.
+- [X] Build the training and validation `DataLoader` objects.
+- [X] Check the printed sample counts and tensor shapes.
 
 The important rule is to avoid information leakage: validation, test, and future data
 must not contribute to the training standardization statistics.
 
 ## Step 6: Build DeepESD
 
-- [ ] Run the cell defining the `DeepESD` PyTorch class.
-- [ ] Run the model-building cell.
-- [ ] Inspect the printed architecture and parameter count.
-- [ ] Understand that three convolutional layers extract spatial features and the final
+- [X] Run the cell defining the `DeepESD` PyTorch class.
+- [X] Run the model-building cell.
+- [X] Inspect the printed architecture and parameter count.
+- [X] Understand that three convolutional layers extract spatial features and the final
       fully connected layer predicts precipitation for all 128 x 128 grid cells.
-- [ ] Note that the baseline uses mean squared error (MSE), which may underestimate
+- [X] Note that the baseline uses mean squared error (MSE), which may underestimate
       rare heavy-rain events.
 
 ## Step 7: Train the model
 
-- [ ] Run the training helper function cells.
-- [ ] Train DeepESD for the configured number of epochs.
-- [ ] Watch both training and validation MSE.
-- [ ] Check whether validation loss improves rather than diverging from training loss.
-- [ ] Plot the training and validation loss curves.
-- [ ] Confirm that the trained weights are saved to `models/deepesd_pr_nz.pt`.
-- [ ] Review the CodeCarbon result in `code_carbon/deepesd_training_emissions.csv` if
+- [X] Run the training helper function cells.
+- [X] Train DeepESD for the configured number of epochs.
+- [X] Watch both training and validation MSE.
+- [X] Check whether validation loss improves rather than diverging from training loss.
+- [X] Plot the training and validation loss curves.
+- [X] Confirm that the trained weights are saved to `models/deepesd_pr_nz.pt`.
+- [X] Review the CodeCarbon result in `code_carbon/deepesd_training_emissions.csv` if
       an emissions estimate is available.
 
 Do not judge the model only by its training loss. Validation behaviour shows whether
@@ -122,13 +122,13 @@ the learned relationship generalises to unseen years.
 
 ## Step 8: Evaluate the historical predictions
 
-- [ ] Run the `downscale` and time-alignment helper cells.
-- [ ] Load the independent 1981-2000 perfect predictors and pseudo-reality target.
-- [ ] Produce DeepESD predictions for the full historical test period.
-- [ ] Calculate the evaluation summary table.
-- [ ] Examine RMSE and the biases of mean precipitation, SDII, P98, and RX1day.
-- [ ] Compare pseudo-reality and DeepESD maps using the same colour scales.
-- [ ] Examine the spatial RMSE and bias maps.
+- [X] Run the `downscale` and time-alignment helper cells.
+- [X] Load the independent 1981-2000 perfect predictors and pseudo-reality target.
+- [X] Produce DeepESD predictions for the full historical test period.
+- [X] Calculate the evaluation summary table.
+- [X] Examine RMSE and the biases of mean precipitation, SDII, P98, and RX1day.
+- [X] Compare pseudo-reality and DeepESD maps using the same colour scales.
+- [X] Examine the spatial RMSE and bias maps.
 
 Know what the metrics measure:
 
@@ -143,14 +143,26 @@ Answer **Question 2**:
 > Which aspects of precipitation does DeepESD reproduce well, which does it struggle
 > with, and why is underestimating extremes dangerous for flood planning?
 
+### Answer to Question 2
+
+The model reproduces average rainfall reasonably well because `bias_mean` is relatively
+small. It struggles more with heavy and extreme rainfall because `bias_P98` and especially
+`bias_RX1day` are larger. Underestimating these extremes is dangerous because flood defences,
+drainage, bridges, and other infrastructure could be designed for less water than may
+actually occur, leaving people and property without enough protection.
+
 Answer **Question 3**:
 
 > Why should a downscaling model be evaluated with several diagnostics instead of a
 > single RMSE value?
 
-You should identify that the baseline generally captures the mean spatial pattern better
-than the upper tail and annual extremes. Similar RMSE values can hide very different
-errors in wet-day intensity and extreme precipitation.
+### Answer to Question 3
+
+RMSE gives one overall measure of daily error, but it does not describe every part of the
+model's performance. Two models can have similar RMSE values while one is much worse at
+predicting heavy rainfall. Using several diagnostics—such as mean bias, SDII, P98, RX1day,
+and spatial bias maps—reveals the model's strengths and weaknesses for average rainfall,
+wet-day intensity, extremes, and different locations.
 
 ## Step 9: Examine distribution shift
 
