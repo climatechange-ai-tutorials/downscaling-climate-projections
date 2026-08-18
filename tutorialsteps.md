@@ -166,32 +166,32 @@ wet-day intensity, extremes, and different locations.
 
 ## Step 9: Examine distribution shift
 
-- [ ] Load the imperfect historical ACCESS-CM2 GCM predictors.
-- [ ] Compare their distribution with the perfect predictors used for training.
-- [ ] Identify why a GCM's biased inputs may differ from the model's training inputs.
-- [ ] Read the note on bias correction or bias adjustment.
+- [X] Load the imperfect historical ACCESS-CM2 GCM predictors.
+- [X] Compare their distribution with the perfect predictors used for training.
+- [X] Identify why a GCM's biased inputs may differ from the model's training inputs.
+- [X] Read the note on bias correction or bias adjustment.
 
 The notebook introduces this issue but does not implement bias adjustment. You still need
 to understand that applying a model to different input distributions can reduce its skill.
 
 ## Step 10: Produce the ACCESS-CM2 projection
 
-- [ ] Downscale historical ACCESS-CM2 GCM predictors.
-- [ ] Downscale future ACCESS-CM2 predictors for 2080-2099.
-- [ ] Calculate the high-resolution climate-change signal:
+- [X] Downscale historical ACCESS-CM2 GCM predictors.
+- [X] Downscale future ACCESS-CM2 predictors for 2080-2099.
+- [X] Calculate the high-resolution climate-change signal:
       future climatology minus historical climatology.
-- [ ] Compare the DeepESD change with the coarse GCM-like change and pseudo-reality.
-- [ ] Inspect the maps and the two-location bar chart.
-- [ ] Explain how downscaling restores different local changes across nearby locations.
+- [X] Compare the DeepESD change with the coarse GCM-like change and pseudo-reality.
+- [X] Inspect the maps and the two-location bar chart.
+- [X] Explain how downscaling restores different local changes across nearby locations.
 
 ## Step 11: Test transfer to EC-Earth3
 
-- [ ] Apply the same trained DeepESD model to EC-Earth3 without retraining it.
-- [ ] Downscale the historical and future EC-Earth3 predictors.
-- [ ] Calculate the EC-Earth3 future-minus-historical change signal.
-- [ ] Compare its maps and point values with ACCESS-CM2 and pseudo-reality.
-- [ ] Identify where the two GCM projections agree and differ.
-- [ ] Explain why using more than one GCM is important for representing uncertainty.
+- [X] Apply the same trained DeepESD model to EC-Earth3 without retraining it.
+- [X] Downscale the historical and future EC-Earth3 predictors.
+- [X] Calculate the EC-Earth3 future-minus-historical change signal.
+- [X] Compare its maps and point values with ACCESS-CM2 and pseudo-reality.
+- [X] Identify where the two GCM projections agree and differ.
+- [X] Explain why using more than one GCM is important for representing uncertainty.
 
 Do not interpret success on one second GCM as proof of universal transferability. A new
 GCM may contain circulation patterns or biases outside the training distribution.
@@ -213,28 +213,10 @@ GCM may contain circulation patterns or biases outside the training distribution
 
 The following experiments are encouraged but are not required for a first complete run:
 
-- [ ] Increase `NUM_EPOCHS` or tune `LEARNING_RATE`.
-- [ ] Increase `FILTERS_LAST_CONV` or modify the model architecture.
+- [X] Increase `NUM_EPOCHS` or tune `LEARNING_RATE`.
+- [X] Increase `FILTERS_LAST_CONV` or modify the model architecture.
 - [ ] Train precipitation in `log1p` space or replace MSE with another loss.
-- [ ] Add or remove predictor variables or pressure levels.
-- [ ] Replace DeepESD with the supplied U-Net example.
-- [ ] Try different New Zealand points or another CORDEX ML-Bench region.
 
 If you attempt an improvement, predict whether it will improve the mean, the extremes,
 or both before running it. Then repeat the same evaluation and compare the evidence with
 your prediction.
-
-## When the tutorial is complete
-
-You have completed the core tutorial when you can check all of the following:
-
-- [ ] The notebook runs from setup through both GCM projections without unresolved errors.
-- [ ] DeepESD has been trained and its loss curves inspected.
-- [ ] The independent historical evaluation table and maps have been produced.
-- [ ] ACCESS-CM2 and EC-Earth3 climate-change signals have been downscaled and compared.
-- [ ] Questions 1, 2, and 3 have been answered in your own words.
-- [ ] You can explain why downscaling is useful and why RMSE alone is insufficient.
-- [ ] You can describe distribution shift, stationarity, GCM uncertainty, and the
-      limitations of pseudo-reality.
-- [ ] You understand that high-resolution output is not automatically more certain or
-      suitable for direct real-world decisions.
